@@ -1,0 +1,17 @@
+services:
+    fastapi:
+        container_name: projex_app
+        build: ..
+        ports:
+            - "8000:8000"
+            - "5678:5678"
+        command: >
+            debugpy --listen 0.0.0.0:5678 -m uvicorn --factory src.main:create_app --reload --host 0.0.0.0 --port 8000
+        volumes:
+            - ..:/projex_app
+        networks:
+            - projex_network
+
+networks:
+    projex_network:
+        driver: bridge
