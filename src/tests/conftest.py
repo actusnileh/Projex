@@ -7,12 +7,12 @@ from logic.mediator import Mediator
 from pytest import fixture
 
 
-@fixture(scope="package")
+@fixture(scope="function")
 def project_repository() -> MemoryProjectRepository:
     return MemoryProjectRepository()
 
 
-@fixture(scope="package")
+@fixture(scope="function")
 def mediator(project_repository: BaseProjectRepository) -> Mediator:
     mediator = Mediator()
     init_mediator(

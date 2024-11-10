@@ -37,6 +37,9 @@ async def test_create_project_command_title_already_exists(
     project = Project(title=Title(title_text))
 
     await project_repository.add_project(project)
+
+    assert project in project_repository._saved_projects
+
     with pytest.raises(ProjectWithThatTitleExistsException):
         await mediator.handle_command(CreateProjectCommand(title=title_text))
 
