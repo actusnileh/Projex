@@ -12,3 +12,7 @@ services:
             ME_CONFIG_BASICAUTH: false
         networks:
             - projex_network
+
+networks:
+    projex_network:
+        driver: bridge

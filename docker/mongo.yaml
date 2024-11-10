@@ -12,5 +12,10 @@ services:
             ME_CONFIG_MONGODB_ENABLE_ADMIN: true
         networks:
             - projex_network
+
 volumes:
     projex-mongo:
+
+networks:
+    projex_network:
+        driver: bridge
