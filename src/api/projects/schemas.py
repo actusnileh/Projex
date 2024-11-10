@@ -1,0 +1,18 @@
+from pydantic import BaseModel
+from src.domain.entities.projects import Project
+
+
+class CreateProjectRequestSchema(BaseModel):
+    title: str
+
+
+class CreateProjectResponseSchema(BaseModel):
+    oid: str
+    title: str
+
+    @classmethod
+    def from_entity(cls, project: Project) -> "CreateProjectResponseSchema":
+        return CreateProjectResponseSchema(
+            oid=project.oid,
+            title=project.title.as_generic_type(),
+        )

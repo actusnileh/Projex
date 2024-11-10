@@ -15,8 +15,8 @@ class BaseCommand(ABC):
     pass
 
 
-CT = TypeVar(name="CT", bound=BaseCommand)
-CR = TypeVar(name="CR", bound=Any)
+CT = TypeVar("CT", bound=BaseCommand)
+CR = TypeVar("CR", bound=Any)
 
 
 @dataclass(frozen=True)

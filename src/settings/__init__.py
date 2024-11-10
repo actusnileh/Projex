@@ -1,5 +1,5 @@
-from settings.general import GeneralSettings
-from settings.mongo import MongoSettings
+from src.settings.general import GeneralSettings
+from src.settings.mongo import MongoSettings
 
 
 class Settings(MongoSettings, GeneralSettings):

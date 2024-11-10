@@ -3,12 +3,12 @@ from dataclasses import (
     field,
 )
 
-from domain.entities.base import BaseEntity
-from domain.events.projects import (
+from src.domain.entities.base import BaseEntity
+from src.domain.events.projects import (
     NewProjectCreated,
     NewTaskReceivedEvent,
 )
-from domain.values.projects import (
+from src.domain.values.projects import (
     Text,
     Title,
 )

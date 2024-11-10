@@ -7,7 +7,7 @@ from dataclasses import (
     field,
 )
 
-from domain.entities.projects import Project
+from src.domain.entities.projects import Project
 
 
 @dataclass

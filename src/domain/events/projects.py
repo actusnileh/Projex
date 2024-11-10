@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from domain.events.base import BaseEvent
+from src.domain.events.base import BaseEvent
 
 
 @dataclass
