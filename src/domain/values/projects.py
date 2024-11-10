@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from domain.exceptions.project import (
+from domain.exceptions.projects import (
     EmptyTextException,
     TitleTooLongException,
 )

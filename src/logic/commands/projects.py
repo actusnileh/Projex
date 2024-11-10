@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
-from domain.entities.project import Project
-from domain.values.project import Title
+from domain.entities.projects import Project
+from domain.values.projects import Title
 from infra.repositories.projects.base import BaseProjectRepository
 from logic.commands.base import (
     BaseCommand,
