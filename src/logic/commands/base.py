@@ -11,14 +11,16 @@ from typing import (
 
 
 @dataclass(frozen=True)
-class BaseCommand(ABC): ...  # noqa
+class BaseCommand(ABC):
+    pass
 
 
-CT = TypeVar("CT", bound=BaseCommand)
-CR = TypeVar("CR", bound=Any)
+CT = TypeVar(name="CT", bound=BaseCommand)
+CR = TypeVar(name="CR", bound=Any)
 
 
 @dataclass(frozen=True)
 class CommandHandler(ABC, Generic[CT, CR]):
     @abstractmethod
-    async def handle(self, command: CT) -> CR: ...
+    def handle(self, command: CT) -> CR:
+        pass

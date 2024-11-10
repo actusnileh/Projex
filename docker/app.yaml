@@ -1,12 +1,12 @@
 services:
     fastapi:
-        container_name: projex_app
+        container_name: projex-app
         build: ..
         ports:
-            - "${FASTAPI_PORT}:8000"
-            - "${DEBUG_PORT}:5678"
+            - ${API_PORT}:8000
+            - ${DEBUG_PORT}:5678
         command: >
-            debugpy --listen 0.0.0.0:5678 -m uvicorn --factory src.api:main:create_app --reload --host 0.0.0.0 --port 8000
+            debugpy --listen 0.0.0.0:5678 -m uvicorn --factory src.api.main:create_app --reload --host 0.0.0.0 --port 8000
         volumes:
             - ..:/projex_app
         networks:

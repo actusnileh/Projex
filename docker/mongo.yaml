@@ -1,0 +1,16 @@
+services:
+    mongodb:
+        container_name: projex-mongo
+        image: mongo:6-jammy
+        ports:
+            - "27017:27017"
+        volumes:
+            - projex-mongo:/data/db
+        environment:
+            MONGO_INITDB_ROOT_USERNAME: ${MONGO_USERNAME:?}
+            MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASSWORD:?}
+            ME_CONFIG_MONGODB_ENABLE_ADMIN: true
+        networks:
+            - projex_network
+volumes:
+    projex-mongo:
