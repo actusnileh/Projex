@@ -43,7 +43,7 @@ combine_star=true
 skip_gitignore=true
 balanced_wrapping=true
 force_grid_wrap=2
-src_paths=["app", "tests"]
+src_paths=["src", "tests"]
 skip_glob=[
     ".git",
     ".idea",
@@ -52,7 +52,7 @@ skip_glob=[
     ".venv",
 ]
 known_fastapi=["fastapi"]
-known_first_party=["app"]
+known_first_party=["src"]
 sections=[
     "FUTURE",
     "STDLIB",

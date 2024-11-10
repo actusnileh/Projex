@@ -1,8 +1,9 @@
 import pytest
+from faker import Faker
+
 from domain.entities.projects import Project
 from domain.values.projects import Title
-from faker import Faker
-from infrastructure.repositories.projects import BaseProjectRepository
+from infrastructure.repositories.projects.base import BaseProjectRepository
 from logic.commands.projects import CreateProjectCommand
 from logic.exceptions.projects import ProjectWithThatTitleExistsException
 from logic.mediator import Mediator

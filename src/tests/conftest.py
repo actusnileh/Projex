@@ -1,7 +1,8 @@
-from infrastructure.repositories.projects import BaseProjectRepository
-from logic.mediator import Mediator
 from punq import Container
 from pytest import fixture
+
+from infrastructure.repositories.projects.base import BaseProjectRepository
+from logic.mediator import Mediator
 from tests.fixtures import init_dummy_container
 
 

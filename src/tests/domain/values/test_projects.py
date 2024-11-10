@@ -1,6 +1,7 @@
 from datetime import datetime
 
 import pytest
+
 from domain.entities.projects import (
     Project,
     Task,

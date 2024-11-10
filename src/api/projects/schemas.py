@@ -1,5 +1,6 @@
-from domain.entities.projects import Project
 from pydantic import BaseModel
+
+from domain.entities.projects import Project
 
 
 class CreateProjectRequestSchema(BaseModel):

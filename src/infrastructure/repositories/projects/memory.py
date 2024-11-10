@@ -1,22 +1,10 @@
-from abc import (
-    ABC,
-    abstractmethod,
-)
 from dataclasses import (
     dataclass,
     field,
 )
 
 from domain.entities.projects import Project
-
-
-@dataclass
-class BaseProjectRepository(ABC):
-    @abstractmethod
-    async def check_project_exists_by_title(self, title: str) -> bool: ...
-
-    @abstractmethod
-    async def add_project(self, project: Project) -> None: ...
+from infrastructure.repositories.projects.base import BaseProjectRepository
 
 
 @dataclass
