@@ -13,10 +13,10 @@ from domain.entities.projects import Project
 @dataclass
 class BaseProjectRepository(ABC):
     @abstractmethod
-    def check_project_exists_by_title(self, title: str) -> bool: ...
+    async def check_project_exists_by_title(self, title: str) -> bool: ...
 
     @abstractmethod
-    def add_project(self, project: Project) -> None: ...
+    async def add_project(self, project: Project) -> None: ...
 
 
 @dataclass
@@ -26,7 +26,7 @@ class MemoryProjectRepository(BaseProjectRepository):
         kw_only=True,
     )
 
-    def check_project_exists_by_title(self, title: str) -> bool:
+    async def check_project_exists_by_title(self, title: str) -> bool:
         try:
             return bool(
                 next(
@@ -38,5 +38,5 @@ class MemoryProjectRepository(BaseProjectRepository):
         except StopIteration:
             return False
 
-    def add_project(self, project: Project) -> None:
+    async def add_project(self, project: Project) -> None:
         self._saved_projects.append(project)

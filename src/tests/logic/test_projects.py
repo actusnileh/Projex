@@ -10,7 +10,7 @@ async def test_create_project_command_success(
     project_repository: BaseProjectRepository,
     mediator: Mediator,
 ):
-    # TODO: Сделать фейкер для генерации случайных текстов
+    # TODO: Сделать faker для генерации случайных текстов
     project: Project = (
         await mediator.handle_command(CreateProjectCommand(title="Project 1"))
     )[0]
