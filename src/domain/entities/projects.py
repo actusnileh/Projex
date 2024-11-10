@@ -42,7 +42,7 @@ class Project(BaseEntity):
 
     def add_task(self, task: Task) -> None:
         self.tasks.add(task)
-        task.register_event(
+        self.register_event(
             NewTaskReceivedEvent(
                 task_title=task.title.as_generic_type(),
                 task_text=task.text.as_generic_type(),
