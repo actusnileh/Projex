@@ -32,7 +32,7 @@ class MemoryProjectRepository(BaseProjectRepository):
                 next(
                     project
                     for project in self._saved_projects
-                    if project.title.value == title
+                    if project.title.as_generic_type() == title
                 ),
             )
         except StopIteration:
