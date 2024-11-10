@@ -1,13 +1,13 @@
 from dataclasses import dataclass
 
-from src.domain.entities.projects import Project
-from src.domain.values.projects import Title
-from src.infrastructure.repositories.projects import BaseProjectRepository
-from src.logic.commands.base import (
+from domain.entities.projects import Project
+from domain.values.projects import Title
+from infrastructure.repositories.projects import BaseProjectRepository
+from logic.commands.base import (
     BaseCommand,
     CommandHandler,
 )
-from src.logic.exceptions.projects import ProjectWithThatTitleExistsException
+from logic.exceptions.projects import ProjectWithThatTitleExistsException
 
 
 @dataclass(frozen=True)

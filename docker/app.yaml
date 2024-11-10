@@ -2,6 +2,8 @@ services:
     fastapi:
         container_name: projex-app
         build: ..
+        environment:
+            - PYTHONPATH=./src
         ports:
             - ${API_PORT}:8000
             - ${DEBUG_PORT}:5678

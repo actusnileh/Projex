@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from src.logic.exceptions.base import LogicException
+from logic.exceptions.base import LogicException
 
 
 @dataclass(eq=False)

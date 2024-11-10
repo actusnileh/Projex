@@ -6,7 +6,7 @@ from typing import (
     TypeVar,
 )
 
-from src.domain.events.base import BaseEvent
+from domain.events.base import BaseEvent
 
 
 ET = TypeVar("ET", bound=BaseEvent)

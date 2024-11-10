@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 
-from src.api.projects.handlers import router as tasks_router
-from src.settings import settings
+from api.projects.handlers import router as tasks_router
+from settings import settings
 
 
 def create_app() -> FastAPI:

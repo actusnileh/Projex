@@ -1,22 +1,20 @@
-from infrastructure.repositories.projects import (
-    BaseProjectRepository,
-    MemoryProjectRepository,
-)
-from logic.init import init_mediator
+from infrastructure.repositories.projects import BaseProjectRepository
 from logic.mediator import Mediator
+from punq import Container
 from pytest import fixture
+from tests.fixtures import init_dummy_container
 
 
 @fixture(scope="function")
-def project_repository() -> MemoryProjectRepository:
-    return MemoryProjectRepository()
+def container() -> Container:
+    return init_dummy_container()
 
 
-@fixture(scope="function")
-def mediator(project_repository: BaseProjectRepository) -> Mediator:
-    mediator = Mediator()
-    init_mediator(
-        mediator=mediator,
-        project_repository=project_repository,
-    )
-    return mediator
+@fixture()
+def mediator(container: Container) -> Mediator:
+    return container.resolve(Mediator)
+
+
+@fixture()
+def project_repository(container: Container) -> BaseProjectRepository:
+    return container.resolve(BaseProjectRepository)

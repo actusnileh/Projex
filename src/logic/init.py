@@ -1,21 +1,33 @@
 from functools import lru_cache
 
-from punq import Container
-from src.infrastructure.repositories.projects import (
+from infrastructure.repositories.projects import (
     BaseProjectRepository,
     MemoryProjectRepository,
 )
-from src.logic.commands.projects import (
+from logic.commands.projects import (
     CreateProjectCommand,
     CreateProjectCommandHandler,
 )
-from src.logic.mediator import Mediator
+from logic.mediator import Mediator
+from punq import (
+    Container,
+    Scope,
+)
 
 
 @lru_cache(1)
 def init_container() -> Container:
+    return _init_container()
+
+
+def _init_container() -> Container:
     container = Container()
-    container.register(BaseProjectRepository, MemoryProjectRepository)
+
+    container.register(
+        BaseProjectRepository,
+        MemoryProjectRepository,
+        scope=Scope.singleton,
+    )
     container.register(CreateProjectCommandHandler)
 
     def init_mediator():

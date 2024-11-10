@@ -14,12 +14,10 @@ async def test_create_project_command_success(
     mediator: Mediator,
     faker: Faker,
 ):
-
-    project: Project = (
-        await mediator.handle_command(
-            CreateProjectCommand(title=faker.text(max_nb_chars=40)),
-        )
-    )[0]
+    project: Project
+    project, *_ = await mediator.handle_command(
+        CreateProjectCommand(title=faker.text(max_nb_chars=40)),
+    )
 
     assert await project_repository.check_project_exists_by_title(
         title=project.title.as_generic_type(),

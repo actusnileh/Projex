@@ -5,19 +5,19 @@ from dataclasses import (
 )
 from typing import Iterable
 
-from src.domain.events.base import BaseEvent
-from src.logic.commands.base import (
+from domain.events.base import BaseEvent
+from logic.commands.base import (
     BaseCommand,
     CommandHandler,
     CR,
     CT,
 )
-from src.logic.events.base import (
+from logic.events.base import (
     ER,
     ET,
     EventHandler,
 )
-from src.logic.exceptions.mediator import (
+from logic.exceptions.mediator import (
     CommandHandlerNotRegisteredException,
     EventHandlerNotRegisteredException,
 )
@@ -43,7 +43,7 @@ class Mediator:
         command: CT,
         command_handlers: Iterable[CommandHandler[CT, CR]],
     ):
-        self.commands_map[command].extend(command_handlers)
+        self.events_map[command].extend(command_handlers)
 
     async def handle_event(self, event: BaseEvent) -> Iterable[ER]:
         event_type = event.__class__

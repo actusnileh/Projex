@@ -1,16 +1,19 @@
-from fastapi import status
+from fastapi import (
+    Depends,
+    status,
+)
 from fastapi.exceptions import HTTPException
 from fastapi.routing import APIRouter
 
-from src.api.dependencies.containers import container
-from src.api.projects.schemas import (
+from api.projects.schemas import (
     CreateProjectRequestSchema,
     CreateProjectResponseSchema,
 )
-from src.api.schemas import ErrorSchema
-from src.domain.exceptions.base import ApplicationException
-from src.logic.commands.projects import CreateProjectCommand
-from src.logic.mediator import Mediator
+from api.schemas import ErrorSchema
+from domain.exceptions.base import ApplicationException
+from logic.commands.projects import CreateProjectCommand
+from logic.init import init_container
+from logic.mediator import Mediator
 
 
 router = APIRouter(
@@ -27,7 +30,10 @@ router = APIRouter(
     status_code=status.HTTP_201_CREATED,
     description="Эндпоинт создаёт новый проект, если проект с таким названием существует, то возвращается 400 ошибка.",
 )
-async def create_project_handler(schema: CreateProjectRequestSchema):
+async def create_project_handler(
+    schema: CreateProjectRequestSchema,
+    container=Depends(init_container),
+):
     """Создать новый проект."""
     mediator: Mediator = container.resolve(Mediator)
 
