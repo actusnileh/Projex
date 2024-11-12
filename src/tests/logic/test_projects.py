@@ -3,7 +3,7 @@ from faker import Faker
 
 from domain.entities.projects import Project
 from domain.values.projects import Title
-from infrastructure.repositories.projects.base import BaseProjectRepository
+from infrastructure.repositories.projects.base import BaseProjectsRepository
 from logic.commands.projects import CreateProjectCommand
 from logic.exceptions.projects import ProjectWithThatTitleExistsException
 from logic.mediator import Mediator
@@ -11,7 +11,7 @@ from logic.mediator import Mediator
 
 @pytest.mark.asyncio
 async def test_create_project_command_success(
-    project_repository: BaseProjectRepository,
+    project_repository: BaseProjectsRepository,
     mediator: Mediator,
     faker: Faker,
 ):
@@ -27,7 +27,7 @@ async def test_create_project_command_success(
 
 @pytest.mark.asyncio
 async def test_create_project_command_title_already_exists(
-    project_repository: BaseProjectRepository,
+    project_repository: BaseProjectsRepository,
     mediator: Mediator,
     faker: Faker,
 ):

@@ -3,16 +3,16 @@ from punq import (
     Scope,
 )
 
-from infrastructure.repositories.projects.base import BaseProjectRepository
-from infrastructure.repositories.projects.memory import MemoryProjectRepository
+from infrastructure.repositories.projects.base import BaseProjectsRepository
+from infrastructure.repositories.projects.memory import MemoryProjectsRepository
 from logic.init import _init_container
 
 
 def init_dummy_container() -> Container:
     container = _init_container()
     container.register(
-        BaseProjectRepository,
-        MemoryProjectRepository,
+        BaseProjectsRepository,
+        MemoryProjectsRepository,
         scope=Scope.singleton,
     )
 

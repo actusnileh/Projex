@@ -6,11 +6,19 @@ from punq import (
     Scope,
 )
 
-from infrastructure.repositories.projects.base import BaseProjectRepository
-from infrastructure.repositories.projects.mongo import MongoDBProjectRepository
+from infrastructure.repositories.projects.base import (
+    BaseProjectsRepository,
+    BaseTasksRepository,
+)
+from infrastructure.repositories.projects.mongo import (
+    MongoDBProjectsRepository,
+    MongoDBPTasksRepository,
+)
 from logic.commands.projects import (
     CreateProjectCommand,
     CreateProjectCommandHandler,
+    CreateTaskCommand,
+    CreateTaskCommandHandler,
 )
 from logic.mediator import Mediator
 from settings import Settings
@@ -25,32 +33,62 @@ def _init_container() -> Container:
     container = Container()
 
     container.register(Settings, instance=Settings(), scope=Scope.singleton)
-    container.register(CreateProjectCommandHandler)
 
-    def init_mediator():
-        mediator = Mediator()
-        mediator.register_command(
-            CreateProjectCommand,
-            [container.resolve(CreateProjectCommandHandler)],
+    settings: Settings = container.resolve(Settings)
+
+    def create_mongo_db_client():
+        return AsyncIOMotorClient(settings.MONGO_URI, serverSelectionTimeoutMS=3000)
+
+    container.register(
+        AsyncIOMotorClient,
+        factory=create_mongo_db_client,
+        scope=Scope.singleton,
+    )
+    client = container.resolve(AsyncIOMotorClient)
+
+    def init_projects_mongodb_repository() -> BaseProjectsRepository:
+        return MongoDBProjectsRepository(
+            mongo_db_client=client,
+            mongo_db_db_name=settings.MONGO_PROJECT_DATABASE,
+            mongo_db_collection_name=settings.MONGO_PROJECT_COLLECTION,
         )
 
-        return mediator
-
-    def init_project_mongodb_repository():
-        settings: Settings = container.resolve(Settings)
-        client = AsyncIOMotorClient(settings.MONGO_URI, serverSelectionTimeoutMS=3000)
-
-        return MongoDBProjectRepository(
+    def init_tasks_mongodb_repository() -> BaseTasksRepository:
+        return MongoDBPTasksRepository(
             mongo_db_client=client,
             mongo_db_db_name=settings.MONGO_PROJECT_DATABASE,
             mongo_db_collection_name=settings.MONGO_PROJECT_COLLECTION,
         )
 
     container.register(
-        BaseProjectRepository,
-        factory=init_project_mongodb_repository,
+        BaseProjectsRepository,
+        factory=init_projects_mongodb_repository,
         scope=Scope.singleton,
     )
+    container.register(
+        BaseTasksRepository,
+        factory=init_tasks_mongodb_repository,
+        scope=Scope.singleton,
+    )
+
+    # Commands & Handlers
+    container.register(CreateProjectCommandHandler)
+    container.register(CreateTaskCommandHandler)
+
+    # Mediator
+    def init_mediator() -> Mediator:
+        mediator = Mediator()
+        mediator.register_command(
+            CreateProjectCommand,
+            [container.resolve(CreateProjectCommandHandler)],
+        )
+        mediator.register_command(
+            CreateTaskCommand,
+            [container.resolve(CreateTaskCommandHandler)],
+        )
+
+        return mediator
+
     container.register(Mediator, factory=init_mediator)
 
     return container

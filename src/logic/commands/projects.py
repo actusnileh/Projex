@@ -1,13 +1,25 @@
 from dataclasses import dataclass
 
-from domain.entities.projects import Project
-from domain.values.projects import Title
-from infrastructure.repositories.projects.base import BaseProjectRepository
+from domain.entities.projects import (
+    Project,
+    Task,
+)
+from domain.values.projects import (
+    Text,
+    Title,
+)
+from infrastructure.repositories.projects.base import (
+    BaseProjectsRepository,
+    BaseTasksRepository,
+)
 from logic.commands.base import (
     BaseCommand,
     CommandHandler,
 )
-from logic.exceptions.projects import ProjectWithThatTitleExistsException
+from logic.exceptions.projects import (
+    ProjectNotFoundException,
+    ProjectWithThatTitleExistsException,
+)
 
 
 @dataclass(frozen=True)
@@ -17,16 +29,50 @@ class CreateProjectCommand(BaseCommand):
 
 @dataclass(frozen=True)
 class CreateProjectCommandHandler(CommandHandler[CreateProjectCommand, Project]):
-    project_repository: BaseProjectRepository
+    projects_repository: BaseProjectsRepository
 
     async def handle(self, command: CreateProjectCommand) -> Project:
-        if await self.project_repository.check_project_exists_by_title(command.title):
+        if await self.projects_repository.check_project_exists_by_title(command.title):
             raise ProjectWithThatTitleExistsException(command.title)
 
         title = Title(value=command.title)
 
         new_project = Project.create_project(title=title)
         # TODO: считать ивенты
-        await self.project_repository.add_project(new_project)
+        await self.projects_repository.add_project(new_project)
 
         return new_project
+
+
+@dataclass(frozen=True)
+class CreateTaskCommand(BaseCommand):
+    title: str
+    text: str
+    project_oid: str
+
+
+@dataclass(frozen=True)
+class CreateTaskCommandHandler(CommandHandler[CreateTaskCommand, Task]):
+    projects_repository: BaseProjectsRepository
+    tasks_repository: BaseTasksRepository
+
+    async def handle(self, command: CreateTaskCommand) -> Task:
+        project = await self.projects_repository.get_project_by_oid(
+            project_oid=command.project_oid,
+        )
+
+        if not project:
+            raise ProjectNotFoundException(project_oid=command.project_oid)
+
+        new_task = Task(
+            title=Title(value=command.title),
+            text=Text(value=command.text),
+        )
+
+        project.add_task(task=new_task)
+        await self.tasks_repository.add_task(
+            project_oid=command.project_oid,
+            task=new_task,
+        )
+
+        return new_task

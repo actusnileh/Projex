@@ -10,3 +10,12 @@ class ProjectWithThatTitleExistsException(LogicException):
     @property
     def message(self):
         return f"Проект с названием '{self.title}' уже существует."
+
+
+@dataclass(eq=False)
+class ProjectNotFoundException(LogicException):
+    project_oid: str
+
+    @property
+    def message(self):
+        return f"Проект с таким {self.project_oid=} не найден."

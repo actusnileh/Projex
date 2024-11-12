@@ -1,7 +1,7 @@
 from punq import Container
 from pytest import fixture
 
-from infrastructure.repositories.projects.base import BaseProjectRepository
+from infrastructure.repositories.projects.base import BaseProjectsRepository
 from logic.mediator import Mediator
 from tests.fixtures import init_dummy_container
 
@@ -17,5 +17,5 @@ def mediator(container: Container) -> Mediator:
 
 
 @fixture()
-def project_repository(container: Container) -> BaseProjectRepository:
-    return container.resolve(BaseProjectRepository)
+def project_repository(container: Container) -> BaseProjectsRepository:
+    return container.resolve(BaseProjectsRepository)

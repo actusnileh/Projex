@@ -4,11 +4,11 @@ from dataclasses import (
 )
 
 from domain.entities.projects import Project
-from infrastructure.repositories.projects.base import BaseProjectRepository
+from infrastructure.repositories.projects.base import BaseProjectsRepository
 
 
 @dataclass
-class MemoryProjectRepository(BaseProjectRepository):
+class MemoryProjectsRepository(BaseProjectsRepository):
     _saved_projects: list[Project] = field(
         default_factory=list,
         kw_only=True,
