@@ -21,6 +21,10 @@ from logic.commands.projects import (
     CreateTaskCommandHandler,
 )
 from logic.mediator import Mediator
+from logic.queries.projects import (
+    GetProjectDetailQuery,
+    GetProjectDetailQueryHandler,
+)
 from settings import Settings
 
 
@@ -74,6 +78,7 @@ def _init_container() -> Container:
     # Commands & Handlers
     container.register(CreateProjectCommandHandler)
     container.register(CreateTaskCommandHandler)
+    container.register(GetProjectDetailQueryHandler)
 
     # Mediator
     def init_mediator() -> Mediator:
@@ -85,6 +90,11 @@ def _init_container() -> Container:
         mediator.register_command(
             CreateTaskCommand,
             [container.resolve(CreateTaskCommandHandler)],
+        )
+
+        mediator.register_query(
+            GetProjectDetailQuery,
+            container.resolve(GetProjectDetailQueryHandler),
         )
 
         return mediator

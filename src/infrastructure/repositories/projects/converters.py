@@ -7,6 +7,10 @@ from domain.entities.projects import (
     Project,
     Task,
 )
+from domain.values.projects import (
+    Text,
+    Title,
+)
 
 
 def convert_task_to_document(task: Task) -> dict:
@@ -30,8 +34,8 @@ def convert_project_to_document(project: Project) -> dict:
 def convert_task_document_to_entity(task_document: Mapping[str, Any]) -> Task:
     return Task(
         oid=task_document["oid"],
-        title=task_document["title"],
-        text=task_document["text"],
+        title=Title(task_document["title"]),
+        text=Text(task_document["text"]),
         created_at=task_document["created_at"],
     )
 
@@ -39,7 +43,7 @@ def convert_task_document_to_entity(task_document: Mapping[str, Any]) -> Task:
 def convert_project_document_to_entity(project_document: Mapping[str, Any]) -> Project:
     return Project(
         oid=project_document["oid"],
-        title=project_document["title"],
+        title=Title(value=project_document["title"]),
         created_at=project_document["created_at"],
         tasks={
             convert_task_document_to_entity(task_document)

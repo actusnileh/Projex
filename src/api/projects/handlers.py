@@ -12,6 +12,7 @@ from api.projects.schemas import (
     CreateProjectResponseSchema,
     CreateTaskRequestSchema,
     CreateTaskResponseSchema,
+    ProjectDetailSchema,
 )
 from api.schemas import ErrorSchema
 from domain.exceptions.base import ApplicationException
@@ -21,6 +22,7 @@ from logic.commands.projects import (
 )
 from logic.init import init_container
 from logic.mediator import Mediator
+from logic.queries.projects import GetProjectDetailQuery
 
 
 router = APIRouter(
@@ -88,3 +90,31 @@ async def create_task_handler(
         )
 
     return CreateTaskResponseSchema.from_entity(task)
+
+
+@router.get(
+    "/{project_oid}/",
+    status_code=status.HTTP_200_OK,
+    description="Получить информацию о проекте и всех задачах в нём.",
+    responses={
+        status.HTTP_200_OK: {"model": ProjectDetailSchema},
+        status.HTTP_400_BAD_REQUEST: {"model": ErrorSchema},
+    },
+)
+async def get_project_with_tasks_handler(
+    project_oid: str,
+    container: Container = Depends(init_container),
+) -> ProjectDetailSchema:
+    mediator: Mediator = container.resolve(Mediator)
+
+    try:
+        project = await mediator.handle_query(
+            GetProjectDetailQuery(project_oid=project_oid),
+        )
+    except ApplicationException as exception:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={"error": exception.message},
+        )
+
+    return ProjectDetailSchema.from_entity(project)
