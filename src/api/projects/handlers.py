@@ -95,13 +95,13 @@ async def create_task_handler(
 @router.get(
     "/{project_oid}/",
     status_code=status.HTTP_200_OK,
-    description="Получить информацию о проекте и всех задачах в нём.",
+    description="Получить информацию о проекте",
     responses={
         status.HTTP_200_OK: {"model": ProjectDetailSchema},
         status.HTTP_400_BAD_REQUEST: {"model": ErrorSchema},
     },
 )
-async def get_project_with_tasks_handler(
+async def get_project_handler(
     project_oid: str,
     container: Container = Depends(init_container),
 ) -> ProjectDetailSchema:

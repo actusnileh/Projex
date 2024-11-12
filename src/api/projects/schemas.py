@@ -1,5 +1,4 @@
 from datetime import datetime
-from typing import Iterable
 
 from pydantic import BaseModel
 
@@ -64,7 +63,7 @@ class ProjectDetailSchema(BaseModel):
     oid: str
     title: str
     created_at: datetime
-    tasks: Iterable[TaskDetailSchema]
+    tasks_count: int
 
     @classmethod
     def from_entity(cls, project: Project) -> "ProjectDetailSchema":
@@ -72,5 +71,5 @@ class ProjectDetailSchema(BaseModel):
             oid=project.oid,
             title=project.title.as_generic_type(),
             created_at=project.created_at,
-            tasks=[TaskDetailSchema.from_entity(task) for task in project.tasks],
+            tasks_count=len(project.tasks),
         )
