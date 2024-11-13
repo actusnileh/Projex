@@ -21,6 +21,8 @@ class Text(BaseValueObject):
 
 @dataclass(frozen=True)
 class Title(BaseValueObject):
+    value: str
+
     def validate(self):
         if not self.value:
             raise EmptyTextException()
