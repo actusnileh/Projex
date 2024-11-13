@@ -10,7 +10,7 @@ build:
 
 .PHONY: drop-all
 drop-all:
-	${DC} -f ${APP_FILE} -f ${MONGO_FILE} -f ${MONGO_EXPRESS_FILE} down
+	${DC} -f ${APP_FILE} -f ${MONGO_FILE} -f ${MONGO_EXPRESS_FILE} ${ENV_FILE} down
 
 .PHONY: logs-app
 logs-app:
