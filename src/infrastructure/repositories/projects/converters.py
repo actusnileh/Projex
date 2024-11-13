@@ -27,7 +27,6 @@ def convert_project_to_document(project: Project) -> dict:
         "oid": project.oid,
         "title": project.title.as_generic_type(),
         "created_at": project.created_at,
-        "tasks": [convert_task_to_document(task) for task in project.tasks],
     }
 
 

@@ -16,6 +16,7 @@ from domain.values.projects import (
 
 @dataclass(eq=False)
 class Task(BaseEntity):
+    project_oid: str
     title: Title
     text: Text
 

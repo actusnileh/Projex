@@ -10,3 +10,4 @@ class MongoSettings(GeneralSettings):
 
     MONGO_PROJECT_DATABASE: str = Field(default="project")
     MONGO_PROJECT_COLLECTION: str = Field(default="project")
+    MONGO_TASK_COLLECTION: str = Field(default="task")

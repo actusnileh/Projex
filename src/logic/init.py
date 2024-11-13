@@ -61,7 +61,7 @@ def _init_container() -> Container:
         return MongoDBPTasksRepository(
             mongo_db_client=client,
             mongo_db_db_name=settings.MONGO_PROJECT_DATABASE,
-            mongo_db_collection_name=settings.MONGO_PROJECT_COLLECTION,
+            mongo_db_collection_name=settings.MONGO_TASK_COLLECTION,
         )
 
     container.register(

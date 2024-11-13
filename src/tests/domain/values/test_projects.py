@@ -1,4 +1,5 @@
 from datetime import datetime
+from uuid import uuid4
 
 import pytest
 
@@ -18,7 +19,7 @@ def test_create_task_success_short_text():
     title = Title("Projex")
     text = Text("Create a new project")
 
-    task = Task(title=title, text=text)
+    task = Task(title=title, text=text, project_oid=str(uuid4()))
 
     assert task.text == text
     assert task.title == title
@@ -30,7 +31,7 @@ def test_create_task_success_long_text():
     title = Title("Projex")
     text = Text("Create a new project" * 500)
 
-    task = Task(title=title, text=text)
+    task = Task(title=title, text=text, project_oid=str(uuid4()))
 
     assert task.text == text
     assert task.title == title
@@ -43,7 +44,7 @@ def test_create_task_with_long_title():
         title = Title("Projex" * 400)
         text = Text("Create a new project" * 500)
 
-        task = Task(title=title, text=text)
+        task = Task(title=title, text=text, project_oid=str(uuid4()))
 
         assert task.text == text
         assert task.title == title
@@ -64,7 +65,7 @@ def test_create_project_success():
 def test_new_task_event():
     title_task = Title("Create")
     text_task = Text("Create a new project")
-    task = Task(title=title_task, text=text_task)
+    task = Task(title=title_task, text=text_task, project_oid=str(uuid4()))
 
     title_project = Title("Project 1")
     project = Project(title=title_project)
