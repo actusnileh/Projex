@@ -44,8 +44,4 @@ def convert_project_document_to_entity(project_document: Mapping[str, Any]) -> P
         oid=project_document["oid"],
         title=Title(value=project_document["title"]),
         created_at=project_document["created_at"],
-        tasks={
-            convert_task_document_to_entity(task_document)
-            for task_document in project_document["tasks"]
-        },
     )

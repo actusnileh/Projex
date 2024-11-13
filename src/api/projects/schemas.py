@@ -63,7 +63,6 @@ class ProjectDetailSchema(BaseModel):
     oid: str
     title: str
     created_at: datetime
-    tasks_count: int
 
     @classmethod
     def from_entity(cls, project: Project) -> "ProjectDetailSchema":
@@ -71,5 +70,4 @@ class ProjectDetailSchema(BaseModel):
             oid=project.oid,
             title=project.title.as_generic_type(),
             created_at=project.created_at,
-            tasks_count=len(project.tasks),
         )

@@ -67,11 +67,11 @@ class CreateTaskCommandHandler(CommandHandler[CreateTaskCommand, Task]):
         new_task = Task(
             title=Title(value=command.title),
             text=Text(value=command.text),
+            project_oid=command.project_oid,
         )
 
         project.add_task(task=new_task)
         await self.tasks_repository.add_task(
-            project_oid=command.project_oid,
             task=new_task,
         )
 

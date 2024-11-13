@@ -50,13 +50,5 @@ class MongoDBProjectsRepository(BaseProjectsRepository, BaseMongoDBRepository):
 
 @dataclass
 class MongoDBPTasksRepository(BaseTasksRepository, BaseMongoDBRepository):
-    async def add_task(self, project_oid: str, task: Task) -> None:
+    async def add_task(self, task: Task) -> None:
         await self._collection.insert_one(document=convert_task_to_document(task))
-        await self._collection.update_one(
-            filter={"oid": project_oid},
-            update={
-                "$push": {
-                    "tasks": convert_task_to_document(task),
-                },
-            },
-        )
