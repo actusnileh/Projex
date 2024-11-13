@@ -19,6 +19,7 @@ def convert_task_to_document(task: Task) -> dict:
         "title": task.title.as_generic_type(),
         "text": task.text.as_generic_type(),
         "created_at": task.created_at,
+        "project_oid": task.project_oid,
     }
 
 
@@ -36,6 +37,7 @@ def convert_task_document_to_entity(task_document: Mapping[str, Any]) -> Task:
         title=Title(task_document["title"]),
         text=Text(task_document["text"]),
         created_at=task_document["created_at"],
+        project_oid=task_document["project_oid"],
     )
 
 

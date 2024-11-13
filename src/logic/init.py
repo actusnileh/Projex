@@ -24,6 +24,8 @@ from logic.mediator import Mediator
 from logic.queries.projects import (
     GetProjectDetailQuery,
     GetProjectDetailQueryHandler,
+    GetTasksQuery,
+    GetTasksQueryHandler,
 )
 from settings import Settings
 
@@ -75,28 +77,34 @@ def _init_container() -> Container:
         scope=Scope.singleton,
     )
 
-    # Commands & Handlers
+    # Commands Handlers
     container.register(CreateProjectCommandHandler)
     container.register(CreateTaskCommandHandler)
+
+    # Query Handlers
     container.register(GetProjectDetailQueryHandler)
+    container.register(GetTasksQueryHandler)
 
     # Mediator
     def init_mediator() -> Mediator:
         mediator = Mediator()
         mediator.register_command(
-            CreateProjectCommand,
-            [container.resolve(CreateProjectCommandHandler)],
+            command=CreateProjectCommand,
+            command_handlers=[container.resolve(CreateProjectCommandHandler)],
         )
         mediator.register_command(
-            CreateTaskCommand,
-            [container.resolve(CreateTaskCommandHandler)],
+            command=CreateTaskCommand,
+            command_handlers=[container.resolve(CreateTaskCommandHandler)],
         )
 
         mediator.register_query(
-            GetProjectDetailQuery,
-            container.resolve(GetProjectDetailQueryHandler),
+            query=GetProjectDetailQuery,
+            query_handler=container.resolve(GetProjectDetailQueryHandler),
         )
-
+        mediator.register_query(
+            query=GetTasksQuery,
+            query_handler=container.resolve(GetTasksQueryHandler),
+        )
         return mediator
 
     container.register(Mediator, factory=init_mediator)

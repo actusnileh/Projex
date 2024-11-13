@@ -2,6 +2,7 @@ from datetime import datetime
 
 from pydantic import BaseModel
 
+from api.schemas import BaseQueryResponseSchema
 from domain.entities.projects import (
     Project,
     Task,
@@ -71,3 +72,7 @@ class ProjectDetailSchema(BaseModel):
             title=project.title.as_generic_type(),
             created_at=project.created_at,
         )
+
+
+class GetTasksQueryResponseSchema(BaseQueryResponseSchema):
+    items: list[TaskDetailSchema]

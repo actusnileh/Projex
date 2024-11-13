@@ -1,5 +1,6 @@
 from abc import ABC
 from dataclasses import dataclass
+from typing import Iterable
 
 from motor.core import AgnosticClient
 
@@ -7,6 +8,7 @@ from domain.entities.projects import (
     Project,
     Task,
 )
+from infrastructure.repositories.filters.projects import GetTasksInfraFilters
 from infrastructure.repositories.projects.base import (
     BaseProjectsRepository,
     BaseTasksRepository,
@@ -14,6 +16,7 @@ from infrastructure.repositories.projects.base import (
 from infrastructure.repositories.projects.converters import (
     convert_project_document_to_entity,
     convert_project_to_document,
+    convert_task_document_to_entity,
     convert_task_to_document,
 )
 
@@ -52,3 +55,19 @@ class MongoDBProjectsRepository(BaseProjectsRepository, BaseMongoDBRepository):
 class MongoDBPTasksRepository(BaseTasksRepository, BaseMongoDBRepository):
     async def add_task(self, task: Task) -> None:
         await self._collection.insert_one(document=convert_task_to_document(task))
+
+    async def get_tasks(
+        self,
+        project_oid: str,
+        filters: GetTasksInfraFilters,
+    ) -> tuple[Iterable[Task], int]:
+        find = {"project_oid": project_oid}
+        cursor = self._collection.find(find).skip(filters.offset).limit(filters.limit)
+
+        tasks = [
+            convert_task_document_to_entity(task_document=message_document)
+            async for message_document in cursor
+        ]
+        count = await self._collection.count_documents(filter=find)
+
+        return tasks, count

@@ -1,7 +1,11 @@
 from dataclasses import dataclass
-from typing import Generic
+from typing import Iterable
 
-from domain.entities.projects import Project
+from domain.entities.projects import (
+    Project,
+    Task,
+)
+from infrastructure.repositories.filters.projects import GetTasksInfraFilters
 from infrastructure.repositories.projects.base import (
     BaseProjectsRepository,
     BaseTasksRepository,
@@ -10,8 +14,6 @@ from logic.exceptions.projects import ProjectNotFoundException
 from logic.queries.base import (
     BaseQuery,
     BaseQueryHandler,
-    QR,
-    QT,
 )
 
 
@@ -21,9 +23,15 @@ class GetProjectDetailQuery(BaseQuery):
 
 
 @dataclass(frozen=True)
-class GetProjectDetailQueryHandler(BaseQueryHandler, Generic[QR, QT]):
+class GetTasksQuery(BaseQuery):
+    project_oid: str
+    filters: GetTasksInfraFilters
+
+
+@dataclass(frozen=True)
+class GetProjectDetailQueryHandler(BaseQueryHandler):
     projects_repository: BaseProjectsRepository
-    tasks_repository: BaseTasksRepository  # TODO: Забирать задачи отдельно
+    tasks_repository: BaseTasksRepository
 
     async def handle(self, query: GetProjectDetailQuery) -> Project:
         project = await self.projects_repository.get_project_by_oid(
@@ -34,3 +42,14 @@ class GetProjectDetailQueryHandler(BaseQueryHandler, Generic[QR, QT]):
             raise ProjectNotFoundException(project_oid=query.project_oid)
 
         return project
+
+
+@dataclass(frozen=True)
+class GetTasksQueryHandler(BaseQueryHandler):
+    tasks_repository: BaseTasksRepository
+
+    async def handle(self, query: GetTasksQuery) -> Iterable[Task]:
+        return await self.tasks_repository.get_tasks(
+            project_oid=query.project_oid,
+            filters=query.filters,
+        )

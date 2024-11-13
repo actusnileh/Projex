@@ -3,11 +3,13 @@ from abc import (
     abstractmethod,
 )
 from dataclasses import dataclass
+from typing import Iterable
 
 from domain.entities.projects import (
     Project,
     Task,
 )
+from infrastructure.repositories.filters.projects import GetTasksInfraFilters
 
 
 @dataclass
@@ -26,3 +28,11 @@ class BaseProjectsRepository(ABC):
 class BaseTasksRepository(ABC):
     @abstractmethod
     async def add_task(self, task: Task) -> None: ...
+
+    @abstractmethod
+    async def get_tasks(
+        self,
+        project_oid: str,
+        filters: GetTasksInfraFilters,
+    ) -> tuple[Iterable[Task], int]:
+        pass

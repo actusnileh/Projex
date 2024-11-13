@@ -7,12 +7,15 @@ from fastapi.routing import APIRouter
 
 from punq import Container
 
+from api.projects.filters import GetTasksFilters
 from api.projects.schemas import (
     CreateProjectRequestSchema,
     CreateProjectResponseSchema,
     CreateTaskRequestSchema,
     CreateTaskResponseSchema,
+    GetTasksQueryResponseSchema,
     ProjectDetailSchema,
+    TaskDetailSchema,
 )
 from api.schemas import ErrorSchema
 from domain.exceptions.base import ApplicationException
@@ -22,7 +25,10 @@ from logic.commands.projects import (
 )
 from logic.init import init_container
 from logic.mediator import Mediator
-from logic.queries.projects import GetProjectDetailQuery
+from logic.queries.projects import (
+    GetProjectDetailQuery,
+    GetTasksQuery,
+)
 
 
 router = APIRouter(
@@ -118,3 +124,40 @@ async def get_project_handler(
         )
 
     return ProjectDetailSchema.from_entity(project)
+
+
+@router.get(
+    "/{project_oid}/tasks/",
+    status_code=status.HTTP_200_OK,
+    description="Получить все задачи в проекте",
+    responses={
+        status.HTTP_200_OK: {"model": GetTasksQueryResponseSchema},
+        status.HTTP_400_BAD_REQUEST: {"model": ErrorSchema},
+    },
+)
+async def get_project_tasks_handler(
+    project_oid: str,
+    filters: GetTasksFilters = Depends(),
+    container: Container = Depends(init_container),
+) -> GetTasksQueryResponseSchema:
+    mediator: Mediator = container.resolve(Mediator)
+
+    try:
+        tasks, count = await mediator.handle_query(
+            GetTasksQuery(
+                project_oid=project_oid,
+                filters=filters.to_infra(),
+            ),
+        )
+    except ApplicationException as exception:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail={"error": exception.message},
+        )
+
+    return GetTasksQueryResponseSchema(
+        count=count,
+        limit=filters.limit,
+        offset=filters.offset,
+        items=[TaskDetailSchema.from_entity(task) for task in tasks],
+    )

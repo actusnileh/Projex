@@ -59,9 +59,9 @@ class Mediator:
     def register_query(
         self,
         query: QT,
-        query_handlers: BaseQueryHandler[QT, QR],
+        query_handler: BaseQueryHandler[QT, QR],
     ) -> QR:
-        self.queries_map[query] = query_handlers
+        self.queries_map[query] = query_handler
 
     async def publish(self, events: Iterable[BaseEvent]) -> Iterable[ER]:
         event_type = events.__class__
