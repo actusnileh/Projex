@@ -86,6 +86,8 @@ async def create_task_handler(
             CreateTaskCommand(
                 title=schema.title,
                 text=schema.text,
+                priority=schema.priority,
+                status=schema.status,
                 project_oid=project_oid,
             ),
         )

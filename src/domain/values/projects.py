@@ -5,6 +5,10 @@ from domain.exceptions.projects import (
     TitleTooLongException,
 )
 from domain.values.base import BaseValueObject
+from domain.values.enums.projects import (
+    TaskPriority,
+    TaskStatus,
+)
 
 
 @dataclass(frozen=True)
@@ -32,3 +36,25 @@ class Title(BaseValueObject):
 
     def as_generic_type(self) -> str:
         return str(self.value)
+
+
+@dataclass(frozen=True)
+class Status(BaseValueObject):
+    value: TaskStatus
+
+    def validate(self):
+        pass
+
+    def as_generic_type(self) -> str:
+        return self.value.value
+
+
+@dataclass(frozen=True)
+class Priority(BaseValueObject):
+    value: TaskPriority
+
+    def validate(self):
+        pass
+
+    def as_generic_type(self) -> str:
+        return self.value.value

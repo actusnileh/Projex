@@ -1,10 +1,13 @@
 from dataclasses import dataclass
+from typing import Optional
 
 from domain.entities.projects import (
     Project,
     Task,
 )
 from domain.values.projects import (
+    Priority,
+    Status,
     Text,
     Title,
 )
@@ -49,6 +52,8 @@ class CreateTaskCommand(BaseCommand):
     title: str
     text: str
     project_oid: str
+    priority: Optional[str]
+    status: Optional[str]
 
 
 @dataclass(frozen=True)
@@ -67,6 +72,8 @@ class CreateTaskCommandHandler(CommandHandler[CreateTaskCommand, Task]):
         new_task = Task(
             title=Title(value=command.title),
             text=Text(value=command.text),
+            priority=Priority(value=command.priority),
+            status=Status(value=command.status),
             project_oid=command.project_oid,
         )
 
